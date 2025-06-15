@@ -1,0 +1,22 @@
+CODE:
+
+import matplotlib.pyplot as plt
+x = [1, 2, 3, 4, 5]  
+y = [10, 15, 7, 12, 20]  
+plt.plot(x, y, marker='o', linestyle='-', color='b')
+plt.xlabel("X-Axis")
+plt.ylabel("Y-Axis")
+plt.title("Simple Line Chart")
+plt.show()
+  
+R CODE:
+  
+library(ggplot2)
+df <- data.frame(X = c(1, 2, 3, 4, 5), Y = c(10, 15, 7, 12, 20))
+ggplot(df, aes(x = X, y = Y)) +
+  geom_line(color = "blue") +
+  geom_point(color = "red") +  # Adds points to the line
+  labs(title = "Simple Line Chart", x = "X-Axis", y = "Y-Axis") +
+  theme_minimal()
+
+
