@@ -1,0 +1,65 @@
+PROGRAM:
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# ---------------------------
+# Sample Data: Employee Work Hours
+# ---------------------------
+data = {
+    'employee_id': [1, 2, 3, 4, 5, 6, 7, 8],
+    'department': ['HR', 'HR', 'IT', 'IT', 'Sales', 'Sales', 'Marketing', 'Marketing'],
+    'hours_worked': [40, 38, 45, 50, 42, 44, 36, 40]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# ---------------------------
+# Group by department to calculate total and average hours
+# ---------------------------
+grouped = df.groupby('department')['hours_worked'].agg(['sum', 'mean']).reset_index()
+
+# Rename columns for clarity
+grouped.columns = ['department', 'total_hours', 'average_hours']
+
+# ---------------------------
+# Create Pivot Table (for demonstration)
+# ---------------------------
+pivot_table = pd.pivot_table(df, index='department', values='hours_worked',
+                              aggfunc=['sum', 'mean'])
+
+# Flatten multi-level columns
+pivot_table.columns = ['total_hours', 'average_hours']
+pivot_table = pivot_table.reset_index()
+
+# ---------------------------
+# Identify Department with Highest Average Hours
+# ---------------------------
+max_avg_dept = pivot_table.loc[pivot_table['average_hours'].idxmax()]
+
+# ---------------------------
+# Display Pivot Table and Summary
+# ---------------------------
+print("Department Work Hours Summary:")
+print(pivot_table)
+print(f"\nDepartment with highest average hours: {max_avg_dept['department']} ({max_avg_dept['average_hours']} hrs)")
+
+# ---------------------------
+# Plot Bar Chart
+# ---------------------------
+plt.figure(figsize=(8, 5))
+bars = plt.bar(pivot_table['department'], pivot_table['average_hours'], color='skyblue')
+
+# Highlight the max department bar
+for bar, dept in zip(bars, pivot_table['department']):
+    if dept == max_avg_dept['department']:
+        bar.set_color('orange')
+
+plt.title('Average Work Hours by Department')
+plt.xlabel('Department')
+plt.ylabel('Average Hours')
+plt.ylim(0, max(pivot_table['average_hours']) + 10)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
