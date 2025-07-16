@@ -1,0 +1,51 @@
+PROGRAM:
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import calendar
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv"
+df = pd.read_csv(url, parse_dates=['Month'], index_col='Month')
+df.columns = ['Passengers']
+print(df.head())
+plt.figure(figsize=(12, 5))
+plt.plot(df, label='Monthly Passengers')
+plt.title('Airline Passenger Traffic Over Time')
+plt.xlabel('Date')
+plt.ylabel('Passengers')
+plt.legend()
+plt.grid(True)
+plt.show()
+rolling_mean = df['Passengers'].rolling(window=12).mean()
+rolling_std = df['Passengers'].rolling(window=12).std()
+plt.figure(figsize=(12, 5))
+plt.plot(df, label='Original')
+plt.plot(rolling_mean, color='red', label='12-Month Rolling Mean')
+plt.plot(rolling_std, color='black', label='12-Month Rolling Std')
+plt.title('Rolling Mean & Standard Deviation')
+plt.legend()
+plt.grid(True)
+plt.show()
+decomposition = seasonal_decompose(df['Passengers'], model='multiplicative', period=12)
+fig = decomposition.plot()
+fig.set_size_inches(14, 10)
+plt.suptitle("Seasonal Decomposition", fontsize=16)
+plt.show()
+fig, ax = plt.subplots(2, 1, figsize=(12, 8))
+plot_acf(df['Passengers'], ax=ax[0], lags=30)
+plot_pacf(df['Passengers'], ax=ax[1], lags=30)
+plt.tight_layout()
+plt.show()
+df_reset = df.reset_index()
+df_reset['Year'] = df_reset['Month'].dt.year
+df_reset['Month_Num'] = df_reset['Month'].dt.month
+pivot_table = df_reset.pivot_table(values='Passengers', index='Month_Num', columns='Year', aggfunc=np.mean)
+pivot_table.index = [calendar.month_name[m] for m in pivot_table.index]  # Use month names
+plt.figure(figsize=(12, 6))
+sns.heatmap(pivot_table, cmap='coolwarm', annot=True, fmt=".0f")
+plt.title('Monthly Passenger Count Heatmap')
+plt.xlabel('Year')
+plt.ylabel('Month')
+plt.show()
