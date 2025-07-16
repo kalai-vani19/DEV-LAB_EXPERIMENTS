@@ -1,0 +1,55 @@
+PROGRAM:
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import calendar
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv"
+df = pd.read_csv(url, parse_dates=['Month'])
+df.columns = ['Month', 'Passengers']
+df['Year'] = df['Month'].dt.year
+df['Month_Num'] = df['Month'].dt.month
+df['Month_Name'] = df['Month'].dt.month_name()
+df['Month_Name'] = pd.Categorical(df['Month_Name'], categories=list(calendar.month_name[1:]), ordered=True)
+sns.set(style='whitegrid')
+plt.figure(figsize=(12, 5))
+sns.lineplot(data=df, x='Month', y='Passengers')
+plt.title('Monthly Airline Passengers Over Time')
+plt.xlabel('Date')
+plt.ylabel('Number of Passengers')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df, x='Month_Name', y='Passengers')
+plt.title('Passenger Distribution by Month (Seasonality)')
+plt.xlabel('Month')
+plt.ylabel('Passengers')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+plt.figure(figsize=(10, 6))
+sns.violinplot(data=df, x='Month_Name', y='Passengers', inner='quartile', palette='Set3')
+plt.title('Passenger Distribution per Month')
+plt.xlabel('Month')
+plt.ylabel('Passengers')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+monthly_avg = df.groupby('Month_Name')['Passengers'].mean().reindex(list(calendar.month_name[1:]))
+plt.figure(figsize=(10, 5))
+sns.barplot(x=monthly_avg.index, y=monthly_avg.values, palette='coolwarm')
+plt.title('Average Passengers per Month')
+plt.xlabel('Month')
+plt.ylabel('Average Passengers')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+pivot = df.pivot_table(values='Passengers', index='Month_Name', columns='Year')
+plt.figure(figsize=(12, 6))
+sns.heatmap(pivot, annot=True, fmt=".0f", cmap='YlGnBu')
+plt.title('Passenger Count Heatmap (Monthly vs Year)')
+plt.xlabel('Year')
+plt.ylabel('Month')
+plt.tight_layout()
+plt.show()
