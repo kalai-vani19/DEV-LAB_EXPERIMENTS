@@ -1,0 +1,21 @@
+PROGRAM:
+library(dplyr)
+data("mtcars")
+df <- mtcars
+df_selected <- select(df, mpg, hp, wt)
+df_dropped <- select(df, -c(gear, carb))
+df_pattern <- select(df, starts_with("d"))
+df_renamed <- rename(df, MilesPerGallon = mpg, HorsePower = hp)
+df_mpg <- filter(df, mpg > 20)
+df_hp_range <- filter(df, hp >= 100 & hp <= 150)
+df_unique <- distinct(df)
+df[1, "mpg"] <- NA
+df_clean <- na.omit(df)
+df_multi_filter <- filter(df, wt < 3 & mpg > 20)
+str(df)
+summary(df)
+colSums(is.na(df))
+df_cleaned <- df %>%
+  select(mpg, hp, wt, gear) %>%
+  filter(mpg > 20, gear == 4)
+df_mazda <- df[grepl("Mazda", rownames(df)), ]
