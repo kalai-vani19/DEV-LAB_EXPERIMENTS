@@ -1,0 +1,63 @@
+PROGRAM:
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load wine quality data
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
+data = pd.read_csv(url, sep=';')
+
+# Summary stats
+print(data.describe())
+
+# Correlation with quality
+corr_matrix = data.corr()
+print(corr_matrix['quality'].sort_values())
+
+# Visualize
+sns.histplot(data['quality'])
+plt.title('Wine Quality Distribution')
+plt.show()
+
+sns.scatterplot(x='alcohol', y='quality', data=data)
+plt.title('Alcohol vs Quality')
+plt.show()
+
+Program:
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load wine quality data
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
+data = pd.read_csv(url, sep=';')
+
+# 1. Wine Quality Distribution
+plt.figure(figsize=(6,4))
+sns.histplot(data['quality'])
+plt.title('Wine Quality Distribution')
+plt.show()
+
+# 2. Alcohol vs Quality
+plt.figure(figsize=(6,4))
+sns.scatterplot(x='alcohol', y='quality', data=data)
+plt.title('Alcohol vs Quality')
+plt.show()
+
+# 3. pH Distribution
+plt.figure(figsize=(6,4))
+sns.histplot(data['pH'], kde=True)
+plt.title('pH Distribution')
+plt.show()
+
+# 4. Correlation Heatmap
+plt.figure(figsize=(10,8))
+sns.heatmap(data.corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+
+# 5. Boxplot of Quality vs Alcohol Content
+plt.figure(figsize=(6,4))
+sns.boxplot(x='quality', y='alcohol', data=data)
+plt.title('Quality vs Alcohol')
+plt.show()
