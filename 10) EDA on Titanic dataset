@@ -1,0 +1,33 @@
+PROGRAM:
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load Titanic dataset
+url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+df = pd.read_csv(url)
+
+# Plots
+plt.figure(figsize=(10,6))
+plt.subplot(2,3,1)
+sns.countplot(x='Survived', data=df)
+plt.title('Survival Count')
+
+plt.subplot(2,3,2)
+sns.countplot(x='Sex', hue='Survived', data=df)
+plt.title('Survival by Gender')
+
+plt.subplot(2,3,3)
+sns.countplot(x='Pclass', hue='Survived', data=df)
+plt.title('Survival by Passenger Class')
+
+plt.subplot(2,3,4)
+sns.histplot(df['Age'].dropna(), kde=True)
+plt.title('Age Distribution')
+
+plt.subplot(2,3,5)
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+
+plt.tight_layout()
+plt.show()
