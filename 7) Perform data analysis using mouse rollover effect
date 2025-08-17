@@ -1,0 +1,32 @@
+PROGRAM:
+import folium
+
+# Create a map
+m = folium.Map(location=[45.5236, -122.6750], zoom_start=13)
+
+# Add markers with rollover effect
+folium.Marker([45.5236, -122.6750], popup='Portland', tooltip='Click for more').add_to(m)
+folium.Marker([45.5336, -122.6850], popup='Location 2', tooltip='Rollover text').add_to(m)
+
+# Save the map to an HTML file
+m.save('folium_map.html')
+import plotly.graph_objects as go
+
+fig = go.Figure(go.Scattermapbox(
+        lat=['45.5236', '45.5336'],
+        lon=['-122.6750', '-122.6850'],
+        mode='markers',
+        marker=go.scattermapbox.Marker(
+            size=9
+        ),
+        text=['Portland', 'Location 2'],
+        hoverinfo='text'
+    ))
+
+fig.update_layout(
+    mapbox_style="open-street-map",
+    mapbox_zoom=12,
+    margin={"r":0,"t":0,"l":0,"b":0}
+)
+
+fig.show()
