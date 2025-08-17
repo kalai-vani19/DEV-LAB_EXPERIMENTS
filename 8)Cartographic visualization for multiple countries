@@ -1,0 +1,34 @@
+PROGRAM:
+import folium
+
+# Create a world map
+m = folium.Map(location=[20, 0], zoom_start=2)
+
+# Add markers for multiple countries
+countries = [
+    [51.5074, -0.1278, 'London'],  # UK
+    [48.8566, 2.3522, 'Paris'],    # France
+    [35.6762, 139.6503, 'Tokyo']   # Japan
+]
+
+for lat, lon, name in countries:
+    folium.Marker([lat, lon], popup=name, tooltip=name).add_to(m)
+
+# Save the map
+m.save('countries_map.html')
+import plotly.graph_objects as go
+
+countries = dict(
+    type='scattergeo',
+    lon = [-0.1278, 2.3522, 139.6503],
+    lat = [51.5074, 48.8566, 35.6762],
+    text = ['London', 'Paris', 'Tokyo'],
+    mode = 'markers',
+)
+
+fig = go.Figure(data=[countries])
+fig.update_layout(
+    title_text = 'Markers in Multiple Countries',
+    geo_scope='world',
+)
+fig.show()
